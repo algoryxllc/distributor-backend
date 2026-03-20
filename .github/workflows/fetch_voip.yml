@@ -26,8 +26,7 @@ jobs:
 
       - name: Fetch 888VoIP Catalog
         env:
-          VOIP_EMAIL: ${{ secrets.VOIP_EMAIL }}
-          VOIP_PASSWORD: ${{ secrets.VOIP_PASSWORD }}
+          VOIP_TOKEN: ${{ secrets.VOIP_TOKEN }}
         run: python fetch_voip.py
 
       - name: Upload Excel as Artifact
