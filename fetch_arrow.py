@@ -14,7 +14,7 @@ def get_token():
         params={"grant_type": "client_credentials"},
         headers={"client_id": CLIENT_ID},
         auth=(CLIENT_ID, CLIENT_SECRET),
-        timeout=30
+        timeout=120
     )
     print(f"Token response status: {response.status_code}")
     if response.status_code == 200:
@@ -40,7 +40,7 @@ def fetch_part(token, sku):
         "pageSize": 200,
         "version": 3
     }
-    response = requests.get(url, headers=headers, params=params, timeout=30)
+    response = requests.get(url, headers=headers, params=params, timeout=120)
     if response.status_code == 200:
         return response.json()
     else:
