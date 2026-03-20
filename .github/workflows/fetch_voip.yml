@@ -1,0 +1,38 @@
+name: Fetch 888VoIP Catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type YES to fetch catalog'
+        required: true
+        default: 'YES'
+
+jobs:
+  fetch-voip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests openpyxl
+
+      - name: Fetch 888VoIP Catalog
+        env:
+          VOIP_EMAIL: ${{ secrets.VOIP_EMAIL }}
+          VOIP_PASSWORD: ${{ secrets.VOIP_PASSWORD }}
+        run: python fetch_voip.py
+
+      - name: Upload Excel as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: voip_catalog
+          path: voip_catalog.xlsx
+          retention-days: 7
