@@ -1,0 +1,38 @@
+name: Fetch MA Labs Catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type YES to fetch catalog'
+        required: true
+        default: 'YES'
+
+jobs:
+  fetch-catalog:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests openpyxl
+
+      - name: Fetch MA Labs Catalog
+        env:
+          MALABS_EMAIL: ${{ secrets.MALABS_EMAIL }}
+          MALABS_PASSWORD: ${{ secrets.MALABS_PASSWORD }}
+        run: python fetch_malabs.py
+
+      - name: Upload Excel as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: malabs_catalog
+          path: malabs_catalog.xlsx
+          retention-days: 7
