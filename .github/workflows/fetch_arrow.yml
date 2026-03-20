@@ -1,0 +1,38 @@
+name: Fetch Arrow Electronics Catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      skus:
+        description: 'SKUs to fetch (one per line)'
+        required: true
+
+jobs:
+  fetch-arrow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests openpyxl
+
+      - name: Fetch Arrow Catalog
+        env:
+          ARROW_CLIENT_ID: ${{ secrets.ARROW_CLIENT_ID }}
+          ARROW_CLIENT_SECRET: ${{ secrets.ARROW_CLIENT_SECRET }}
+          SKUS: ${{ inputs.skus }}
+        run: python fetch_arrow.py
+
+      - name: Upload Excel as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arrow_catalog
+          path: arrow_catalog.xlsx
+          retention-days: 7
