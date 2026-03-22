@@ -1,0 +1,39 @@
+name: Fetch Avnet Catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      skus:
+        description: 'SKUs to fetch (one per line)'
+        required: true
+
+jobs:
+  fetch-avnet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests openpyxl
+
+      - name: Fetch Avnet Catalog
+        env:
+          AVNET_CLIENT_ID: ${{ secrets.AVNET_CLIENT_ID }}
+          AVNET_CLIENT_SECRET: ${{ secrets.AVNET_CLIENT_SECRET }}
+          SKUS: ${{ inputs.skus }}
+        run: python fetch_avnet.py
+
+      - name: Upload Excel as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: avnet_catalog
+          path: avnet_catalog.xlsx
+          retention-days: 7
