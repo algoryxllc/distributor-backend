@@ -28,6 +28,7 @@ jobs:
         env:
           MALABS_EMAIL: ${{ secrets.MALABS_EMAIL }}
           MALABS_PASSWORD: ${{ secrets.MALABS_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: python fetch_malabs.py
 
       - name: Upload Excel as Artifact
