@@ -125,7 +125,7 @@ print(f"\nDone! {total_fetched} items saved to malabs_catalog.xlsx")
 # =============================================
 import json, base64, datetime
 
-GH_TOKEN = os.environ.get("GH_TOKEN")
+GH_TOKEN = os.environ.get("MALABS_PAT")
 GH_OWNER = "algoryxllc"
 GH_REPO  = "distributor-backend"
 JSON_PATH = "data/malabs_latest.json"
