@@ -37,6 +37,9 @@ offset = 0
 total_fetched = 0
 next_url = f"https://online.malabs.com/mws/items/?format=json&limit=10&offset=0"
 
+# Store records for JSON sync
+json_records = []
+
 while next_url:
     try:
         response = requests.get(next_url, auth=(EMAIL, PASSWORD), timeout=60)
@@ -82,6 +85,27 @@ while next_url:
             inventory.get("1005", 0),
             inventory.get("1006", 0),
         ])
+
+        # Collect for JSON sync
+        json_records.append({
+            "mfr_sku": item.get("manufacturer_no", ""),
+            "disti_sku": item.get("item_no", ""),
+            "manufacturer": item.get("manufacturer", ""),
+            "price": item.get("price", ""),
+            "quantity": sum([
+                int(inventory.get("1001", 0) or 0),
+                int(inventory.get("1002", 0) or 0),
+                int(inventory.get("1003", 0) or 0),
+                int(inventory.get("1004", 0) or 0),
+                int(inventory.get("1005", 0) or 0),
+                int(inventory.get("1006", 0) or 0),
+            ]),
+            "weight": item.get("weight", ""),
+            "length": item.get("length", ""),
+            "width": item.get("width", ""),
+            "height": item.get("height", ""),
+        })
+
         total_fetched += 1
 
     offset += 10
@@ -94,3 +118,53 @@ while next_url:
 
 wb.save("malabs_catalog.xlsx")
 print(f"\nDone! {total_fetched} items saved to malabs_catalog.xlsx")
+
+# =============================================
+# ADDED: Save JSON to GitHub repo for auto-sync
+# Nothing above this line was changed
+# =============================================
+import json, base64, datetime
+
+GH_TOKEN = os.environ.get("GH_TOKEN")
+GH_OWNER = "algoryxllc"
+GH_REPO  = "distributor-backend"
+JSON_PATH = "data/malabs_latest.json"
+
+if GH_TOKEN:
+    print("\nSaving JSON to GitHub for Pricing Portal auto-sync...")
+
+    output = {
+        "fetched_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "distributor": "MA Labs",
+        "total": total_fetched,
+        "records": json_records
+    }
+
+    encoded = base64.b64encode(json.dumps(output).encode()).decode()
+
+    # Check if file already exists (need SHA to update)
+    check = requests.get(
+        f"https://api.github.com/repos/{GH_OWNER}/{GH_REPO}/contents/{JSON_PATH}",
+        headers={"Authorization": f"token {GH_TOKEN}"}
+    )
+    sha = check.json().get("sha") if check.status_code == 200 else None
+
+    payload = {
+        "message": f"Auto-update MA Labs — {total_fetched} items",
+        "content": encoded
+    }
+    if sha:
+        payload["sha"] = sha
+
+    result = requests.put(
+        f"https://api.github.com/repos/{GH_OWNER}/{GH_REPO}/contents/{JSON_PATH}",
+        headers={"Authorization": f"token {GH_TOKEN}"},
+        json=payload
+    )
+
+    if result.status_code in [200, 201]:
+        print(f"JSON saved to GitHub: {JSON_PATH}")
+    else:
+        print(f"Failed to save JSON: {result.status_code}")
+else:
+    print("No GH_TOKEN found — skipping JSON save")
