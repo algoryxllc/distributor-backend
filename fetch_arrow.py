@@ -4,7 +4,7 @@ from openpyxl import Workbook
 
 # =============================================
 # PASTE YOUR ACCESS TOKEN HERE (from Postman)
-ACCESS_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJNeUFycm93RXh0ZXJuYWxDbGllbnQiXSwiZXhwIjoxNzc0MzEwNDc4LCJqdGkiOiJHbEZubG9uQy1mM0t4R2JJemlDeVpvRUl1YXciLCJjbGllbnRfaWQiOiJhbGdvcnl4LWxsYyJ9.PZFF24QOWzRsWUrTWvFgpHRZAdvautE3y37diWZhLnfzNbphO6pLxZU7pRgSGC5E78RPnguuRjmZWV5pAJl96YsQn7--zzpcngIGmifd-Z1NoWvn7IJQnOttXREQqdZn6bsElMG9S8zkuRKpnt072ODoFmujaiIrsdaQDQ7oU8SIJk2vP4oc9Wfk-LDw94LywIiwHd_RCFPKuRqMHaDWU7Ksk6OIb7nlj5A56QPCtfFIE2fVdOIg62GDwehwSJS-bPs17aJsQ71snC7PnXxwfKBwqHptYIyoRe006drBkkR7nEDWQ_r9zvzS1I3VGjFZt66JI31wM3tuJ5D6mlK5Zg"
+ACCESS_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJNeUFycm93RXh0ZXJuYWxDbGllbnQiXSwiZXhwIjoxNzc1NTIyNzA3LCJqdGkiOiJ4UzBxWnRDaUYwc2I3OVVldktNNUkyV2tBZjQiLCJjbGllbnRfaWQiOiJhbGdvcnl4LWxsYyJ9.Jb0lFJOh0j00f-TblI1mGireHcfTgVyni9QWZHpL7pkSQVax1-MPHa7mXi4UWhw-A317XPt63r5C-1Cp_z5pvZCgAbMOo5wik8vTsRATtQbka42TzrFi_51DvvvFaunnrsIcx404sKVwZWqWEzhhBKZ2QWUVccrXvTWIm7jG1dLAnPX9YUK5YBlqvkLL_MGVFfO7ZQ5FRFefEh4fD6Y2ePhcFHjehP75PZw6nI4UrlFFqYYBamHPpTgFjdqBpXeGoiUccTclsIDhi6nHTrXCGY_Mu-9-StnM_fwOmhX2_i5mLDoppN-mFO3rLBK-9UCE3RHRQcf4adJHF0tUgm3ndg"
 # =============================================
 
 CLIENT_ID = os.environ.get("ARROW_CLIENT_ID")
